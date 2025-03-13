@@ -24,7 +24,7 @@
           <div class="navbar-nav">
             <a class="nav-link active" aria-current="page" href="login.php">Logowanie</a>
             <a class="nav-link active" href="rejestracja.php">Rejestracja</a>
-            <a class="nav-link" href="#">Wyloguj</a>
+            <a class="nav-link" href="logout.php">Wyloguj</a>
           </div>
         </div>
       </div>
@@ -80,6 +80,9 @@
         $query = "INSERT INTO `users`(`first_name`, `email`, `password`) VALUES ('$username','$email','$password');";
         // dodanie danych do bazy
         $conn->query($query);
+
+        $_SESSION['zalogowany'] = True;
+        $_SESSION['user'] = $username;
 
         header("location:dashboard.php");
       }

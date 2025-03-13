@@ -24,7 +24,7 @@
           <div class="navbar-nav">
             <a class="nav-link active" aria-current="page" href="login.php">Logowanie</a>
             <a class="nav-link active" href="rejestracja.php">Rejestracja</a>
-            <a class="nav-link" href="#">Wyloguj</a>
+            <a class="nav-link" href="logout.php">Wyloguj</a>
           </div>
         </div>
       </div>
@@ -66,6 +66,15 @@
             print("<div class='alert alert-success' role='alert'>
             dobre hasło
             </div>"); // znalazlo emaila z haslem
+            
+            $query = "select first_name from users where email='$email';";
+            $result = $conn->query($query);
+            $table = $result->fetch_assoc();
+            $username = $table['first_name'];
+
+            $_SESSION['zalogowany'] = True;
+            $_SESSION['user'] = $username;
+
             header("location: dashboard.php");
         }
       }

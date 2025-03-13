@@ -12,6 +12,7 @@
 
     <?php
     session_start();
+    
     ?>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -22,15 +23,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" aria-current="page" href="login.php">Logowanie</a>
-            <a class="nav-link active" href="rejestracja.php">Rejestracja</a>
-            <a class="nav-link" href="#">Wyloguj</a>
+            <a class="nav-link" aria-current="page" href="login.php">Logowanie</a>
+            <a class="nav-link" href="rejestracja.php">Rejestracja</a>
+            <a class="nav-link active" href="logout.php">Wyloguj</a>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container">
-
+    <div class="container d-flex justify-content-center">
+        <h1>Witaj <?php print($_SESSION['user']); ?></h1>
     </div>
 </body>
 </html>
