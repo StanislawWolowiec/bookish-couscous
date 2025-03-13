@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejestracja</title>
+    <title>Logowanie</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 </head>
@@ -32,15 +32,11 @@
 
     <div class="container">
     <div class="container w-25">
-        <h1 class="mb-5">Register</h1>
+        <h1 class="mb-5">Login</h1>
         <form method="post">
             <div class="mb-3">
               <label for="InputEmail" class="form-label">Email address</label>
               <input type="email" class="form-control" id="InputEmail" name="email">
-            </div>
-            <div class="mb-3">
-              <label for="InputUsername class="form-label">First Name</label>
-              <input type="text" class="form-control" id="InputUsername" name="username">
             </div>
             <div class="mb-3">
                 <label for="InputPassword" class="form-label">Password</label>
@@ -51,44 +47,53 @@
     
     
     <?php
-    if(!empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])){
-      $email = $_POST['email'];
-      $username = $_POST['username']; // zmienne z formularza
+    if(!empty($_POST['email']) && !empty($_POST['password'])){
+      $email = $_POST['email']; // zmienne z formularza
       $password = $_POST['password'];
       
       $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
       
-      function czyIstniejeEmail($email, $conn){
+      function czyDobreHaslo($email, $conn, $password){
+        $query = "select email from users where password='$password' and email='$email';";
+        $result = $conn->query($query);
+
+        if($result->num_rows == 0){
+            print("<div class='alert alert-danger' role='alert'>
+            złe hasło
+            </div>"); // brak emaila z haslem
+        }
+        else{
+            print("<div class='alert alert-success' role='alert'>
+            dobre hasło
+            </div>"); // brak emaila z haslem
+        }
+      }
+
+      function czyIstniejeEmail($email, $conn, $password){
         $query = "select email from users;"; // zapytanie o email
         $result = $conn->query($query);
         if($result->num_rows == 0){
-          return(False); // jezeli nie ma emaili w bazie
+            print("<div class='alert alert-danger' role='alert'>
+            nie ma konta z takim emailem
+            </div>");
+          // jezeli nie ma emaili w bazie
         }
         else{
           while($table = $result->fetch_assoc()){
             if($table['email'] == $email){
-              return(True); // jezeli jest ten sam email
+              // jezeli jest ten sam email
+              
+              czyDobreHaslo($email, $conn, $password);        
+              return;
             }
           }
-          return(False); // jezeli nie ma emaili w bazie
+          print("<div class='alert alert-danger' role='alert'>
+            nie ma konta z takim emailem
+            </div>");
+          // jezeli nie ma emaili w bazie
         }
       }
-
-      $bul = czyIstniejeEmail($email, $conn);
-      if(!$bul){
-        // mozna sie logowac
-        $query = "INSERT INTO `users`(`first_name`, `email`, `password`) VALUES ('$username','$email','$password');";
-        // dodanie danych do bazy
-        $conn->query($query);
-
-        header("location:dashboard.php");
-      }
-      else{
-        // email zajenty
-        print("<div class='alert alert-danger' role='alert'>
-        email is taken
-        </div>");
-      }
+      czyIstniejeEmail($email, $conn, $password);
     }
     else{
       
