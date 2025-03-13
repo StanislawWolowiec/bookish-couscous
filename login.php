@@ -65,7 +65,8 @@
         else{
             print("<div class='alert alert-success' role='alert'>
             dobre hasło
-            </div>"); // brak emaila z haslem
+            </div>"); // znalazlo emaila z haslem
+            header("location: dashboard.php");
         }
       }
 
