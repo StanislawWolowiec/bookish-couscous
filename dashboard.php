@@ -13,6 +13,9 @@
     <?php
     session_start();
     
+    if($_SESSION['zalogowany'] == False){
+        header("location:niezalogowany.php");
+    }
     ?>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
