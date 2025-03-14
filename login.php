@@ -12,6 +12,7 @@
     
     <?php
     session_start();
+    //Sesja  ['loggedIn'], ['user'], ['account']
     ?>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -52,58 +53,60 @@
       $password = $_POST['password'];
       
       $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
-      
-      function czyDobreHaslo($email, $conn, $password){
-        $query = "select email from users where password='$password' and email='$email';";
-        $result = $conn->query($query);
 
-        if($result->num_rows == 0){
-            print("<div class='alert alert-danger' role='alert'>
+      function NoEmail(){
+        print("<div class='alert alert-danger' role='alert'>
+            nie ma konta z takim emailem
+            </div>");
+      }
+      function BadPassword(){
+        print("<div class='alert alert-danger' role='alert'>
             złe hasło
-            </div>"); // brak emaila z haslem
-        }
-        else{
-            print("<div class='alert alert-success' role='alert'>
-            dobre hasło
-            </div>"); // znalazlo emaila z haslem
-            
-            $query = "select first_name from users where email='$email';";
-            $result = $conn->query($query);
-            $table = $result->fetch_assoc();
-            $username = $table['first_name'];
-
-            $_SESSION['zalogowany'] = True;
-            $_SESSION['user'] = $username;
-
-            header("location: dashboard.php");
-        }
+            </div>");
       }
 
-      function czyIstniejeEmail($email, $conn, $password){
-        $query = "select email from users;"; // zapytanie o email
+      function IsGoodPassword($conn, $email, $password){
+        $query = "select id from users where email='$email' and password='$password';";
         $result = $conn->query($query);
-        if($result->num_rows == 0){
-            print("<div class='alert alert-danger' role='alert'>
-            nie ma konta z takim emailem
-            </div>");
-          // jezeli nie ma emaili w bazie
+        if($result->num_rows > 0){
+          return true;
         }
         else{
-          while($table = $result->fetch_assoc()){
-            if($table['email'] == $email){
-              // jezeli jest ten sam email
-              
-              czyDobreHaslo($email, $conn, $password);        
-              return;
-            }
-          }
-          print("<div class='alert alert-danger' role='alert'>
-            nie ma konta z takim emailem
-            </div>");
-          // jezeli nie ma emaili w bazie
+          return false;
         }
       }
-      czyIstniejeEmail($email, $conn, $password);
+      function LogInToSite($conn, $email){
+        $_SESSION['loggedIn'] = true;
+        $_SESSION['account'] = $email;
+
+        $query = "select first_name from users where email='$email';";
+        $result = $conn->query($query);
+        $table = $result->fetch_assoc();
+        $username = $table['first_name'];
+        $_SESSION['user'] = $username;
+
+        $conn->close();
+
+        header("location:dashboard.php");
+      }
+      function CheckLoginData($conn, $email, $password){
+        $query = "select email from users where email='$email';";
+        $result = $conn->query($query);
+        if($result->num_rows > 0){
+          if(IsGoodPassword($conn, $email, $password)){
+            LogInToSite($conn, $email);
+          }
+          else{
+            BadPassword();
+          }
+        }
+        else{
+          NoEmail();
+        }
+      }
+
+      CheckLoginData($conn, $email, $password);
+
     }
     else{
       

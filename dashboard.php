@@ -12,8 +12,9 @@
 
     <?php
     session_start();
+    //Sesja  ['loggedIn'], ['user'], ['account']
     
-    if($_SESSION['zalogowany'] == False){
+    if($_SESSION['loggedIn'] == False){
         header("location:niezalogowany.php");
     }
     ?>
@@ -35,6 +36,9 @@
     </nav>
     <div class="container d-flex justify-content-center">
         <h1>Witaj <?php print($_SESSION['user']); ?></h1>
+    </div>
+    <div class="container">
+      
     </div>
 </body>
 </html>

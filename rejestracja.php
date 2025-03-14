@@ -12,6 +12,7 @@
     
     <?php
     session_start();
+    //Sesja  ['loggedIn'], ['user'], ['account']
     ?>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -58,39 +59,46 @@
       
       $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
       
-      function czyIstniejeEmail($email, $conn){
-        $query = "select email from users;"; // zapytanie o email
-        $result = $conn->query($query);
-        if($result->num_rows == 0){
-          return(False); // jezeli nie ma emaili w bazie
-        }
-        else{
-          while($table = $result->fetch_assoc()){
-            if($table['email'] == $email){
-              return(True); // jezeli jest ten sam email
-            }
-          }
-          return(False); // jezeli nie ma emaili w bazie
-        }
+      function EmailTaken(){
+        print("<div class='alert alert-danger' role='alert'>
+            Email zajęty
+            </div>");
       }
 
-      $bul = czyIstniejeEmail($email, $conn);
-      if(!$bul){
-        // mozna sie logowac
-        $query = "INSERT INTO `users`(`first_name`, `email`, `password`) VALUES ('$username','$email','$password');";
-        // dodanie danych do bazy
-        $conn->query($query);
+      function CheckEmail($conn, $email){
+        $query = "select email from users where email='$email';";
+        $result = $conn->query($query);
+        if($result->num_rows > 0){
+          EmailTaken();
+          return true;
+        }
+        else{
+          return false;
+        }
+      }
+      
+      function CreateAccount($conn, $email, $password, $username){
+        $stmt = $conn->prepare("INSERT INTO `users`(`first_name`, `email`, `password`) VALUES (?, ?, ?)");
 
-        $_SESSION['zalogowany'] = True;
+        $stmt->bind_param("sss", $u, $e, $p);
+        $u = $username;
+        $e = $email;
+        $p = $password;
+
+        $stmt->execute();
+
+        $stmt->close();
+        $conn->close();
+
+        $_SESSION['loggedIn'] = true;
+        $_SESSION['account'] = $email;
         $_SESSION['user'] = $username;
 
         header("location:dashboard.php");
       }
-      else{
-        // email zajenty
-        print("<div class='alert alert-danger' role='alert'>
-        email is taken
-        </div>");
+
+      if(!CheckEmail($conn, $email)){
+        CreateAccount($conn, $email, $password, $username);
       }
     }
     else{

@@ -1,6 +1,7 @@
 <?php
 session_start();
-$_SESSION['zalogowany'] = False;
+//Sesja  ['loggedIn'], ['user'], ['account']
+$_SESSION['loggedIn'] = False;
 $_SESSION['user'] = null;
 
 header("location:login.php")
