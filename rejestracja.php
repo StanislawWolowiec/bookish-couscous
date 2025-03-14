@@ -56,6 +56,7 @@
       $email = $_POST['email'];
       $username = $_POST['username']; // zmienne z formularza
       $password = $_POST['password'];
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
       
       $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
       
@@ -77,13 +78,13 @@
         }
       }
       
-      function CreateAccount($conn, $email, $password, $username){
+      function CreateAccount($conn, $email, $hashedPassword, $username){
         $stmt = $conn->prepare("INSERT INTO `users`(`first_name`, `email`, `password`) VALUES (?, ?, ?)");
 
         $stmt->bind_param("sss", $u, $e, $p);
         $u = $username;
         $e = $email;
-        $p = $password;
+        $p = $hashedPassword;
 
         $stmt->execute();
 
@@ -98,7 +99,7 @@
       }
 
       if(!CheckEmail($conn, $email)){
-        CreateAccount($conn, $email, $password, $username);
+        CreateAccount($conn, $email, $hashedPassword, $username);
       }
     }
     else{
