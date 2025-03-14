@@ -66,8 +66,15 @@
       }
 
       function IsGoodPassword($conn, $email, $password){
-        $query = "select password from users where email='$email';";
-        $result = $conn->query($query);
+        $stmt = $conn->prepare("select password from users where email=?");
+
+        $stmt->bind_param("s", $e);
+        $e = $email;
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
         $table = $result->fetch_assoc();
         $hashedPassword = $table['password'];
         if(password_verify($password, $hashedPassword)){
