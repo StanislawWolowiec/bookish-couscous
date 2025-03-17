@@ -52,24 +52,25 @@
     
     
     <?php
-    if(!empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])){
-      $email = $_POST['email'];
-      $username = $_POST['username']; // zmienne z formularza
-      $password = $_POST['password'];
-      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-      
-      $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
+    
+      try {
+        $pdo = new PDO("mysql:host=localhost;dbname=login_system", "root", "", [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+      } catch (PDOException $e) {
+        die("Database connection failed: " . $e->getMessage());
+      }
       
       function EmailTaken(){
-        print("<div class='alert alert-danger' role='alert'>
-            Email zajęty
-            </div>");
+        print("<div class='alert alert-danger' role='alert'>Email zajęty</div>");
       }
 
-      function CheckEmail($conn, $email){
-        $query = "select email from users where email='$email';";
-        $result = $conn->query($query);
-        if($result->num_rows > 0){
+      function CheckEmail($pdo, $email){
+        $stmt = $pdo->prepare("SELECT email FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+
+        if($stmt->rowCount() > 0){
           EmailTaken();
           return true;
         }
@@ -78,18 +79,9 @@
         }
       }
       
-      function CreateAccount($conn, $email, $hashedPassword, $username){
-        $stmt = $conn->prepare("INSERT INTO `users`(`first_name`, `email`, `password`) VALUES (?, ?, ?)");
-
-        $stmt->bind_param("sss", $u, $e, $p);
-        $u = $username;
-        $e = $email;
-        $p = $hashedPassword;
-
-        $stmt->execute();
-
-        $stmt->close();
-        $conn->close();
+      function CreateAccount($pdo, $email, $hashedPassword, $username){
+        $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `email`, `password`) VALUES (?, ?, ?)");
+        $stmt->execute([$username, $email, $hashedPassword]);
 
         $_SESSION['loggedIn'] = true;
         $_SESSION['account'] = $email;
@@ -98,13 +90,12 @@
         header("location:dashboard.php");
       }
 
-      if(!CheckEmail($conn, $email)){
-        CreateAccount($conn, $email, $hashedPassword, $username);
+      if (!empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
+        if(!CheckEmail($pdo, $_POST['email'])){
+          CreateAccount($pdo, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['username']);
+        }
       }
-    }
-    else{
-      
-    }
+    
     ?>
     </div>
     </div>

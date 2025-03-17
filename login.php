@@ -48,77 +48,63 @@
     
     
     <?php
-    if(!empty($_POST['email']) && !empty($_POST['password'])){
-      $email = $_POST['email']; // zmienne z formularza
-      $password = $_POST['password'];
-      
-      $conn = new mysqli("localhost", "root", "", "login_system"); // baza danych
-
-      function NoEmail(){
-        print("<div class='alert alert-danger' role='alert'>
-            nie ma konta z takim emailem
-            </div>");
-      }
-      function BadPassword(){
-        print("<div class='alert alert-danger' role='alert'>
-            złe hasło
-            </div>");
-      }
-
-      function IsGoodPassword($conn, $email, $password){
-        $stmt = $conn->prepare("select password from users where email=?");
-
-        $stmt->bind_param("s", $e);
-        $e = $email;
-
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
-
-        $table = $result->fetch_assoc();
-        $hashedPassword = $table['password'];
-        if(password_verify($password, $hashedPassword)){
-          return true;
-        }
-        else{
-          return false;
-        }
-      }
-      function LogInToSite($conn, $email){
-        $_SESSION['loggedIn'] = true;
-        $_SESSION['account'] = $email;
-
-        $query = "select first_name from users where email='$email';";
-        $result = $conn->query($query);
-        $table = $result->fetch_assoc();
-        $username = $table['first_name'];
-        $_SESSION['user'] = $username;
-
-        $conn->close();
-
-        header("location:dashboard.php");
-      }
-      function CheckLoginData($conn, $email, $password){
-        $query = "select email from users where email='$email';";
-        $result = $conn->query($query);
-        if($result->num_rows > 0){
-          if(IsGoodPassword($conn, $email, $password)){
-            LogInToSite($conn, $email);
-          }
-          else{
-            BadPassword();
-          }
-        }
-        else{
-          NoEmail();
-        }
-      }
-
-      CheckLoginData($conn, $email, $password);
-
+    
+    try {
+      $pdo = new PDO("mysql:host=localhost;dbname=login_system", "root", "", [
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+      ]);
+    } catch (PDOException $e) {
+      die("Database connection failed: " . $e->getMessage());
     }
-    else{
+
+    function NoEmail() {
+      print("<div class='alert alert-danger' role='alert'>Nie ma konta z takim emailem</div>");
+    }
+
+    function BadPassword() {
+      print("<div class='alert alert-danger' role='alert'>Złe hasło</div>");
+    }
+
+    function IsGoodPassword($pdo, $email, $password) {
+      $stmt = $pdo->prepare("SELECT password FROM users WHERE email = ?");
+      $stmt->execute([$email]);
+      $table = $stmt->fetch();
+      $hashedPassword = $table['password'];
       
+      return password_verify($password, $hashedPassword);
+    }
+
+    function LogInToSite($pdo, $email) {
+      $_SESSION['loggedIn'] = true;
+      $_SESSION['account'] = $email;
+      
+      $stmt = $pdo->prepare("SELECT first_name FROM users WHERE email = ?");
+      $stmt->execute([$email]);
+      $table = $stmt->fetch();
+      $_SESSION['user'] = $table['first_name'];
+      
+      header("Location: dashboard.php");
+      exit();
+    }
+
+    function CheckLoginData($pdo, $email, $password) {
+      $stmt = $pdo->prepare("SELECT email FROM users WHERE email = ?");
+      $stmt->execute([$email]);
+      
+      if ($stmt->rowCount() > 0) {
+          if (IsGoodPassword($pdo, $email, $password)) {
+              LogInToSite($pdo, $email);
+          } else {
+              BadPassword();
+          }
+      } else {
+          NoEmail();
+      }
+    }
+
+    if (!empty($_POST['email']) && !empty($_POST['password'])) {
+      CheckLoginData($pdo, $_POST['email'], $_POST['password']);
     }
     ?>
     </div>
