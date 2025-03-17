@@ -44,7 +44,7 @@
                 <input type="password" class="form-control" id="InputPassword" name="password">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+        </form>
     
     
     <?php
