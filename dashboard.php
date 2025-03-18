@@ -67,8 +67,8 @@
     </div>
 
     <div class="container d-flex justify-content-center">
-      <form action="askChat.php">
-        <button type="submit" class="btn btn-primary">Send</button>
+      <form action="newChat.php">
+        <button type="submit" class="btn btn-primary">ChatGPT</button>
       </form>
     </div>
 </body>
