@@ -71,5 +71,10 @@
         <button type="submit" class="btn btn-primary">ChatGPT</button>
       </form>
     </div>
+    <div class="container d-flex justify-content-center">
+      <form action="newHugchat.php">
+        <button type="submit" class="btn btn-primary">Hugging face chat</button>
+      </form>
+    </div>
 </body>
 </html>
