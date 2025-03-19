@@ -38,41 +38,8 @@
         <h1>Witaj <?php print($_SESSION['user']); ?></h1>
     </div>
 
-    <div class="container d-flex justify-content-center flex-column"> <!-- Wiadomości -->
-
-      <div class="container d-flex flex-row-reverse align-items-center justify-content-center">
-        <div class="container" style="width: 100px; height: 100px">
-          <img src="images/ziutek.jpg" class="border" style="width: 100px; height: 100px;">
-        </div>
-        <div class="alert alert-secondary w-25" role="alert">
-          Message
-        </div>
-        <div class="w-50" role="alert">
-          
-        </div>
-      </div>
-
-      <div class="container d-flex flex-row align-items-center justify-content-center">
-        <div class="container" style="width: 100px; height: 100px">
-          <img src="images/chat.jpg" class="border" style="width: 100px; height: 100px;">
-        </div>
-        <div class="alert alert-primary w-25" role="alert">
-          Response
-        </div>
-        <div class="w-50" role="alert">
-          
-        </div>
-      </div>
-
-    </div>
-
     <div class="container d-flex justify-content-center">
-      <form action="newChat.php">
-        <button type="submit" class="btn btn-primary">ChatGPT</button>
-      </form>
-    </div>
-    <div class="container d-flex justify-content-center">
-      <form action="newHugchat.php">
+      <form action="Hugchat.php">
         <button type="submit" class="btn btn-primary">Hugging face chat</button>
       </form>
     </div>
