@@ -13,6 +13,9 @@
     <?php
     session_start();
     //Sesja  ['loggedIn'], ['user'], ['account']
+    if(!$_SESSION['loggedIn']){
+      $_SESSION['loggedIn'] = False;
+    }
     ?>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">

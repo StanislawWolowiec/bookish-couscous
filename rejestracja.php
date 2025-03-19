@@ -115,7 +115,9 @@
 
         if($isGood == False){
           IncorrectPassword($passRules);
+          return false;
         }
+          return true;
       }
       
       function CreateAccount($pdo, $email, $hashedPassword, $username){
