@@ -77,6 +77,46 @@
           return false;
         }
       }
+
+      function IncorrectPassword($passRules){
+        for($i = 0; $i < count($passRules); $i++){
+          if($passRules[$i] == "short"){
+            print("<div class='alert alert-danger' role='alert'>Hasło musi mieć co najmniej 8 znaków</div>");
+          }
+          if($passRules[$i] == "upper"){
+            print("<div class='alert alert-danger' role='alert'>Hasło musi mieć duże litery</div>");
+          }
+          if($passRules[$i] == "lower"){
+            print("<div class='alert alert-danger' role='alert'>Hasło musi mieć małe litery</div>");
+          }
+        }
+      }
+
+      function CheckPassword(){
+        $pass = $_POST['password'];
+        $isGood = True;
+        $passRules = array();
+
+        if(strlen($pass) < 8){
+          $isGood = False;
+          $passRules[] = "short";
+        }
+
+        $upperCase = preg_match('/[A-Z]/', $pass); 
+        if($upperCase == False){
+          $isGood = False;
+          $passRules[] = "upper";
+        }
+        $lowerCase = preg_match('/[a-z]/', $pass);
+        if($lowerCase == False){
+          $isGood = False;
+          $passRules[] = "lower";
+        }
+
+        if($isGood == False){
+          IncorrectPassword($passRules);
+        }
+      }
       
       function CreateAccount($pdo, $email, $hashedPassword, $username){
         $stmt = $pdo->prepare("INSERT INTO `users`(`first_name`, `email`, `password`) VALUES (?, ?, ?)");
@@ -91,7 +131,9 @@
 
       if (!empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
         if(!CheckEmail($pdo, $_POST['email'])){
-          CreateAccount($pdo, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['username']);
+          if(CheckPassword()){
+            CreateAccount($pdo, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['username']);
+          }
         }
       }
     
