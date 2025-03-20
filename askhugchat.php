@@ -3,8 +3,9 @@ header("Content-Type: application/json");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+
 $huggingface_api_key = ""; // Replace with your API key
-$api_url = "https://api-inference.huggingface.co/models/Qwen/QwQ-32B";
+$api_url = "https://api-inference.huggingface.co/models/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B";
 
 // Read input
 $input = file_get_contents("php://input");
