@@ -13,7 +13,7 @@
     <?php
     session_start();
     //Sesja  ['loggedIn'], ['user'], ['account']
-    if(!$_SESSION['loggedIn']){
+    if(empty($_SESSION['loggedIn'])){
       $_SESSION['loggedIn'] = False;
     }
     ?>
