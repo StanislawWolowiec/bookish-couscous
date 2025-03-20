@@ -15,7 +15,8 @@
     //Sesja  ['loggedIn'], ['user'], ['account']
     
     if($_SESSION['loggedIn'] == False){
-        header("location:niezalogowany.php");
+        $_SESSION['loggedOut'] = True;
+        header("location:login.php");
     }
     ?>
 

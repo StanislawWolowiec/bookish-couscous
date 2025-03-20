@@ -11,9 +11,9 @@
     
     <?php
     session_start();
-    if (!isset($_SESSION['loggedIn']) || $_SESSION['loggedIn'] == false) {
-        header("location:niezalogowany.php");
-        exit();
+    if($_SESSION['loggedIn'] == False){
+      $_SESSION['loggedOut'] = True;
+      header("location:login.php");
     }
     ?>
 
