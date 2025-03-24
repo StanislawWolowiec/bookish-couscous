@@ -65,6 +65,10 @@
         print("<div class='alert alert-danger' role='alert'>Email zajęty</div>");
       }
 
+      function InvalidEmain(){
+        print("<div class='alert alert-danger' role='alert'>Email nieprawidłowy</div>");
+      }
+
       function CheckEmail($pdo, $email){
         $stmt = $pdo->prepare("SELECT email FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -74,6 +78,12 @@
           return true;
         }
         else{
+          if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+          } else {
+              InvalidEmain();
+              return true;
+          }
           return false;
         }
       }

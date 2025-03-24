@@ -88,6 +88,10 @@
       exit();
     }
 
+    function InvalidEmain(){
+      print("<div class='alert alert-danger' role='alert'>Email nieprawidłowy</div>");
+    }
+
     function CheckLoginData($pdo, $email, $password) {
       $stmt = $pdo->prepare("SELECT email FROM users WHERE email = ?");
       $stmt->execute([$email]);
@@ -104,6 +108,10 @@
     }
 
     if (!empty($_POST['email']) && !empty($_POST['password'])) {
+      if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        InvalidEmain();
+        return;
+      }
       CheckLoginData($pdo, $_POST['email'], $_POST['password']);
     }
     ?>
