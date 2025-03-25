@@ -28,12 +28,12 @@
             <?php
              if($_SESSION['loggedIn'] == True){
               print('<a class="nav-link active" href="dashboard.php">Dashboard</a>');
-              print('<a class="nav-link active" href="Hugchat.php">Chat</a>');
-              print('<a class="nav-link active" href="logout.php">Wyloguj</a>');
+              print('<a class="nav-link active" href="hugchat.php">Chat</a>');
+              print('<a class="nav-link active" href="PHPModules/logout.php">Wyloguj</a>');
              }
               else{
                 print('<a class="nav-link active" aria-current="page" href="login.php">Logowanie</a>');
-                print('<a class="nav-link active" href="rejestracja.php">Rejestracja</a>');
+                print('<a class="nav-link active" href="register.php">Rejestracja</a>');
               }
             ?>
           </div>

@@ -14,10 +14,7 @@
     session_start();
     //Sesja  ['loggedIn'], ['user'], ['account']
     
-    if($_SESSION['loggedIn'] == False){
-        $_SESSION['loggedOut'] = True;
-        header("location:login.php");
-    }
+    include("PHPModules/CheckIfLoggedIn.php");
     ?>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -28,9 +25,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-          <a class="nav-link" href="index.php">Dashboard</a>
-            <a class="nav-link active" href="Hugchat.php">Chat</a>
-            <a class="nav-link active" href="logout.php">Wyloguj</a>
+          <a class="nav-link" href="dashboard.php">Dashboard</a>
+            <a class="nav-link active" href="hugchat.php">Chat</a>
+            <a class="nav-link active" href="PHPModules/logout.php">Wyloguj</a>
           </div>
         </div>
       </div>
@@ -40,7 +37,7 @@
     </div>
 
     <div class="container d-flex justify-content-center">
-      <form action="Hugchat.php">
+      <form action="hugchat.php">
         <button type="submit" class="btn btn-primary">Hugging face chat</button>
       </form>
     </div>

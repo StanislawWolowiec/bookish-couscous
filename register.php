@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
+    <title>Rejestracja</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
 </head>
@@ -23,8 +23,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" aria-current="page" href="login.php">Logowanie</a>
-            <a class="nav-link active" href="register.php">Rejestracja</a>
+            <a class="nav-link active" aria-current="page" href="login.php">Logowanie</a>
+            <a class="nav-link" href="register.php">Rejestracja</a>
           </div>
         </div>
       </div>
@@ -32,41 +32,43 @@
 
     <div class="container">
     <div class="container w-25">
-        <h1 class="mb-5">Login</h1>
+        <h1 class="mb-5">Register</h1>
         <form method="post">
             <div class="mb-3">
               <label for="InputEmail" class="form-label">Email address</label>
               <input type="email" class="form-control" id="InputEmail" name="email">
             </div>
             <div class="mb-3">
+              <label for="InputUsername class="form-label">First Name</label>
+              <input type="text" class="form-control" id="InputUsername" name="username">
+            </div>
+            <div class="mb-3">
                 <label for="InputPassword" class="form-label">Password</label>
                 <input type="password" class="form-control" id="InputPassword" name="password">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+          </form>
     
     
     <?php
-    try {
-      $pdo = new PDO("mysql:host=localhost;dbname=login_system", "root", "", [
-          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-      ]);
-    } catch (PDOException $e) {
-      die("Database connection failed: " . $e->getMessage());
-    }
+    
+      try {
+        $pdo = new PDO("mysql:host=localhost;dbname=login_system", "root", "", [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+      } catch (PDOException $e) {
+        die("Database connection failed: " . $e->getMessage());
+      }
+      
+      include("Methods/RegisterMethods.php");
 
-    include("PHPModules/niezalogowany.php");
-    include("Methods/LoginMethods.php");
-
-    if (empty($_POST['email']) && empty($_POST['password'])) {
-      return;
-    }
-    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-      InvalidEmail();
-      return;
-    }
-    CheckLoginData($pdo, $_POST['email'], $_POST['password']);
+      if (empty($_POST['email']) && empty($_POST['username']) && empty($_POST['password'])) {
+        return;
+      }
+      if(CheckEmail($pdo, $_POST['email']) && CheckPassword()){
+        CreateAccount($pdo, $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT), $_POST['username']);
+      }
     ?>
     </div>
     </div>
