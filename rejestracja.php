@@ -77,15 +77,13 @@
           EmailTaken();
           return true;
         }
-        else{
-          if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return false;
-          } else {
-              InvalidEmain();
-              return true;
-          }
-          return false;
-        }
+      
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+          InvalidEmain();
+          return true;
+        } 
+        return false;
+      
       }
 
       function IncorrectPassword($passRules){
