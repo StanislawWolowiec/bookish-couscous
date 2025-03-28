@@ -30,7 +30,7 @@
       </div>
     </nav>
     
-    <div class="container text-center mt-4">
+    <div class="container text-center">
         <h1>Ask Chat</h1>
     </div>
 

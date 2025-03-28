@@ -1,11 +1,11 @@
 <?php
 
 function EmailTaken(){
-    print("<div class='alert alert-danger' role='alert'>Email zajęty</div>");
+    print("<div class='alert alert-danger m-2' role='alert'>Email zajęty</div>");
   }
 
   function InvalidEmain(){
-    print("<div class='alert alert-danger' role='alert'>Email nieprawidłowy</div>");
+    print("<div class='alert alert-danger m-2' role='alert'>Email nieprawidłowy</div>");
   }
 
   function CheckEmail($pdo, $email){
@@ -28,13 +28,13 @@ function EmailTaken(){
   function IncorrectPassword($passRules){
     for($i = 0; $i < count($passRules); $i++){
       if($passRules[$i] == "short"){
-        print("<div class='alert alert-danger' role='alert'>Hasło musi mieć co najmniej 8 znaków</div>");
+        print("<div class='alert alert-danger m-2' role='alert'>Hasło musi mieć co najmniej 8 znaków</div>");
       }
       if($passRules[$i] == "upper"){
-        print("<div class='alert alert-danger' role='alert'>Hasło musi mieć duże litery</div>");
+        print("<div class='alert alert-danger m-2' role='alert'>Hasło musi mieć duże litery</div>");
       }
       if($passRules[$i] == "lower"){
-        print("<div class='alert alert-danger' role='alert'>Hasło musi mieć małe litery</div>");
+        print("<div class='alert alert-danger m-2' role='alert'>Hasło musi mieć małe litery</div>");
       }
     }
   }

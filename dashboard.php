@@ -38,7 +38,7 @@
 
     <div class="container d-flex justify-content-center">
       <form action="hugchat.php">
-        <button type="submit" class="btn btn-primary">Hugging face chat</button>
+        <button type="submit" class="btn btn-primary mt-5 h-100">Hugging face chat</button>
       </form>
     </div>
 </body>

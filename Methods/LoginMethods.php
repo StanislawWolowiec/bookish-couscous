@@ -1,11 +1,11 @@
 <?php
 
 function NoEmail() {
-    print("<div class='alert alert-danger' role='alert'>Nie ma konta z takim emailem</div>");
+    print("<div class='alert alert-danger m-2' role='alert'>Nie ma konta z takim emailem</div>");
   }
 
   function BadPassword() {
-    print("<div class='alert alert-danger' role='alert'>Złe hasło</div>");
+    print("<div class='alert alert-danger m-2' role='alert'>Złe hasło</div>");
   }
 
   function IsGoodPassword($pdo, $email, $password) {
@@ -31,7 +31,7 @@ function NoEmail() {
   }
 
   function InvalidEmail(){
-    print("<div class='alert alert-danger' role='alert'>Email nieprawidłowy</div>");
+    print("<div class='alert alert-danger m-2' role='alert'>Email nieprawidłowy</div>");
   }
 
   function CheckLoginData($pdo, $email, $password) {
